@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.bank.mapper.LogMapper">
+    <insert id="insertLog" parameterType="com.qf.bank.pojo.Log">
+        INSERT INTO `bank`.`log`
+        (
+        `date`,
+        `userId`,
+        <if test="moneyOut != null">
+            `moneyOut`,
+        </if>
+        <if test="moneyIn != null">
+            `moneyIn`,
+        </if>
+        `result`,
+        `type`
+        <if test="comment != null">
+            , `comment`
+        </if>
+        )
+        VALUES
+        (
+        #{date},
+        #{userId},
+        <if test="moneyOut != null">
+            #{moneyOut},
+        </if>
+        <if test="moneyIn != null">
+            #{moneyIn},
+        </if>
+        #{result},
+        #{type}
+        <if test="comment != null">
+            , #{comment}
+        </if>
+        );
+    </insert>
+
+    <select id="selectLog" parameterType="com.qf.bank.util.QueryVo" resultType="com.qf.bank.pojo.Log">
+        SELECT
+        log.id,
+        log.date,
+        log.userId,
+        log.moneyOut,
+        log.moneyIn,
+        log.result,
+        log.type,
+        log.`comment`
+        FROM
+        log
+        WHERE
+        log.userId = #{userId}
+        <if test="dateFrom != null and dateFrom != ''">
+            AND log.date >= #{dateFrom}
+        </if>
+        <if test="dateTo != null and dateTo != ''">
+            AND log.date &lt;= #{dateTo}
+        </if>
+        LIMIT #{start},#{size}
+    </select>
+
+    <select id="selectTotalCount" parameterType="com.qf.bank.util.QueryVo" resultType="Integer">
+        SELECT
+        Count(log.id)
+        FROM
+        log
+        WHERE
+        log.userId = #{userId}
+        <if test="dateFrom != null and dateFrom != ''">
+            AND log.date >= #{dateFrom}
+        </if>
+        <if test="dateTo != null and dateTo != ''">
+            AND log.date &lt;= #{dateTo}
+        </if>
+    </select>
+</mapper>

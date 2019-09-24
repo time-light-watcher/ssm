@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.bank.mapper.UserMapper">
+
+    <select id="selectUser" resultType="com.qf.bank.pojo.User">
+        SELECT
+        `user`.id,
+        `user`.cardNumber,
+        `user`.`password`,
+        `user`.money,
+        `user`.frozen
+        FROM
+        `user`
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="cardNumber != null">
+                AND cardNumber = #{cardNumber}
+            </if>
+            <if test="password != null">
+                AND password != #{password}
+            </if>
+            <if test="frozen != null">
+                AND frozen = #{frozen}
+            </if>
+            <if test="money != null">
+                AND money = #{money}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateUser" parameterType="com.qf.bank.pojo.User">
+        UPDATE `bank`.`user`
+        SET
+        <if test="cardNumber != null">
+            `cardNumber` = #{cardNumber},
+        </if>
+        <if test="password != null">
+            `password` = #{password},
+        </if>
+        <if test="money != null">
+            `money` = #{money},
+        </if>
+        <if test="frozen != null">
+            `frozen` = #{frozen},
+        </if>
+        `id` = #{id}
+        WHERE `id` = #{id};
+    </update>
+</mapper>
